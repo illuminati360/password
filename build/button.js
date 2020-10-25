@@ -83,6 +83,9 @@ var Button = /** @class */ (function () {
         this._label.text.contents = text;
         this._label.text.color = color;
     };
+    Button.prototype.updateColor = function (_color) {
+        this._button.appearance.material.color = new MRE.Color4(_color.r, _color.g, _color.b, 1);
+    };
     return Button;
 }());
 exports.Button = Button;

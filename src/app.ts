@@ -31,12 +31,12 @@ const BLOCKER_OFFSET_X = 2.8;
 const BLOCKER_OFFSET_Y = 0;
 const BLOCKER_OFFSET_Z = BLOCKER_DEPTH/2;
 
-const OVERRIDE_WIDTH = 1;
-const OVERRIDE_HEIGHT = 1;
-const OVERRIDE_DEPTH = 0.5;
-const OVERRIDE_OFFSET_X = 3.2;
-const OVERRIDE_OFFSET_Y = 2;
-const OVERRIDE_OFFSET_Z = 2;
+const OVERRIDE_WIDTH = 0.3;
+const OVERRIDE_HEIGHT = 0.3;
+const OVERRIDE_DEPTH = 0.005;
+const OVERRIDE_OFFSET_X = 5.85;
+const OVERRIDE_OFFSET_Y = 0.45;
+const OVERRIDE_OFFSET_Z = 1;
 
 /**
  * The main class of this app. All the logic goes here.
@@ -96,7 +96,7 @@ export default class Numlock {
         this.blockerMaterialId = this.assets.createMaterial('blocker_material', { color: MRE.Color3.LightGray() }).id;
 
         this.overrideMeshId = this.assets.createBoxMesh('override_mesh', OVERRIDE_WIDTH, OVERRIDE_HEIGHT, OVERRIDE_DEPTH).id;
-        this.overrideMaterialId = this.assets.createMaterial('override_material', { color: MRE.Color3.Green() }).id;
+        this.overrideMaterialId = this.assets.createMaterial('override_material', { color: MRE.Color3.Red() }).id;
 
         this.deniedSound = this.assets.createSound('denied', { uri: `${this.baseUrl}/denied.ogg` });
         this.grantedSound = this.assets.createSound('granted', { uri: `${this.baseUrl}/granted.ogg` });

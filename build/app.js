@@ -45,6 +45,12 @@ var BLOCKER_DELAY = 3 * 1000;
 var BLOCKER_OFFSET_X = 2.8;
 var BLOCKER_OFFSET_Y = 0;
 var BLOCKER_OFFSET_Z = BLOCKER_DEPTH / 2;
+var OVERRIDE_WIDTH = 0.3;
+var OVERRIDE_HEIGHT = 0.3;
+var OVERRIDE_DEPTH = 0.005;
+var OVERRIDE_OFFSET_X = 5.85;
+var OVERRIDE_OFFSET_Y = 0.45;
+var OVERRIDE_OFFSET_Z = 1;
 /**
  * The main class of this app. All the logic goes here.
  */
@@ -59,6 +65,7 @@ var Numlock = /** @class */ (function () {
         this.inputText = '';
         this.screenText = PLACEHOLDER;
         this.screenTextColor = MRE.Color3.Black();
+        this.isGranted = false;
         this.context = _context;
         this.baseUrl = _baseUrl;
         this.assets = new MRE.AssetContainer(this.context);
@@ -69,6 +76,8 @@ var Numlock = /** @class */ (function () {
         this.btnMaterialId = this.assets.createMaterial('scr_material', { color: MRE.Color3.LightGray() }).id;
         this.blockerMeshId = this.assets.createBoxMesh('blocker_mesh', BLOCKER_WIDTH, BLOCKER_HEIGHT, BLOCKER_DEPTH).id;
         this.blockerMaterialId = this.assets.createMaterial('blocker_material', { color: MRE.Color3.LightGray() }).id;
+        this.overrideMeshId = this.assets.createBoxMesh('override_mesh', OVERRIDE_WIDTH, OVERRIDE_HEIGHT, OVERRIDE_DEPTH).id;
+        this.overrideMaterialId = this.assets.createMaterial('override_material', { color: MRE.Color3.Red() }).id;
         this.deniedSound = this.assets.createSound('denied', { uri: this.baseUrl + "/denied.ogg" });
         this.grantedSound = this.assets.createSound('granted', { uri: this.baseUrl + "/granted.ogg" });
         this.beepSound = this.assets.createSound('beep', { uri: this.baseUrl + "/beep.ogg" });
@@ -81,6 +90,7 @@ var Numlock = /** @class */ (function () {
         this.createScreen(this.context);
         this.createNumpad(this.context);
         this.createBlocker(this.context);
+        this.createOverride(this.context);
     };
     Numlock.prototype.createScreen = function (context) {
         var nc = BUTTON_LAYOUT[0].length;
@@ -177,6 +187,24 @@ var Numlock = /** @class */ (function () {
             layer: MRE.CollisionLayer.Navigation
         });
     };
+    Numlock.prototype.createOverride = function (context) {
+        var _this = this;
+        this.override = new button_1.Button(this.context, {
+            name: "override",
+            position: {
+                x: OVERRIDE_OFFSET_X,
+                y: OVERRIDE_OFFSET_Y,
+                z: OVERRIDE_OFFSET_Z,
+            },
+            scale: { x: BUTTON_SCALE, y: BUTTON_SCALE, z: BUTTON_SCALE },
+            meshId: this.overrideMeshId,
+            materialId: this.overrideMaterialId,
+            buttonDepth: BUTTON_DEPTH
+        });
+        this.override.addBehavior(function (_, __) {
+            _this.toggleAccess();
+        });
+    };
     Numlock.prototype.refreshScreen = function () {
         this.screen.updateLabel(this.screenText, this.screenTextColor);
     };
@@ -220,6 +248,10 @@ var Numlock = /** @class */ (function () {
         this.playSound(this.deniedSound);
         // blocker
         this.blocker.block();
+        // override
+        this.override.updateColor(MRE.Color3.Red());
+        // logic
+        this.isGranted = false;
     };
     Numlock.prototype.grantAccess = function () {
         // text
@@ -231,6 +263,20 @@ var Numlock = /** @class */ (function () {
         this.playSound(this.grantedSound);
         // blocker
         this.blocker.unblock();
+        // override
+        this.override.updateColor(MRE.Color3.Green());
+        // logic
+        this.isGranted = true;
+    };
+    Numlock.prototype.toggleAccess = function () {
+        if (this.isGranted) {
+            this.denyAccess();
+            this.override.updateColor(MRE.Color3.Red());
+        }
+        else {
+            this.grantAccess();
+            this.override.updateColor(MRE.Color3.Green());
+        }
     };
     Numlock.prototype.playSound = function (musicAsset) {
         this.screen._button.startSound(musicAsset.id, {
