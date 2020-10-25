@@ -31,9 +31,9 @@ const BLOCKER_OFFSET_X = 2.8;
 const BLOCKER_OFFSET_Y = 0;
 const BLOCKER_OFFSET_Z = BLOCKER_DEPTH/2;
 
-const OVERRIDE_WIDTH = 0.2;
-const OVERRIDE_HEIGHT = 0.2;
-const OVERRIDE_DEPTH = 0.005;
+const OVERRIDE_WIDTH = 1;
+const OVERRIDE_HEIGHT = 1;
+const OVERRIDE_DEPTH = 0.5;
 const OVERRIDE_OFFSET_X = 3.2;
 const OVERRIDE_OFFSET_Y = 2;
 const OVERRIDE_OFFSET_Z = 2;
@@ -291,6 +291,9 @@ export default class Numlock {
         // blocker
         this.blocker.block();
 
+        // override
+        this.override.updateColor(MRE.Color3.Red());
+
         // logic
         this.isGranted = false;
     }
@@ -307,6 +310,9 @@ export default class Numlock {
         
         // blocker
         this.blocker.unblock();
+
+        // override
+        this.override.updateColor(MRE.Color3.Green());
 
         // logic
         this.isGranted = true;
