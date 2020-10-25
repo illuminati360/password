@@ -95,7 +95,7 @@ export default class Numlock {
         this.blockerMeshId = this.assets.createBoxMesh('blocker_mesh', BLOCKER_WIDTH, BLOCKER_HEIGHT, BLOCKER_DEPTH).id;
         this.blockerMaterialId = this.assets.createMaterial('blocker_material', { color: MRE.Color3.LightGray() }).id;
 
-        this.overrideMeshId = this.assets.createBoxMesh('override_mesh', BLOCKER_WIDTH, BLOCKER_HEIGHT, BLOCKER_DEPTH).id;
+        this.overrideMeshId = this.assets.createBoxMesh('override_mesh', OVERRIDE_WIDTH, OVERRIDE_HEIGHT, OVERRIDE_DEPTH).id;
         this.overrideMaterialId = this.assets.createMaterial('override_material', { color: MRE.Color3.Green() }).id;
 
         this.deniedSound = this.assets.createSound('denied', { uri: `${this.baseUrl}/denied.ogg` });
