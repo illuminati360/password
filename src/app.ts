@@ -31,6 +31,9 @@ const BLOCKER_OFFSET_X = 2.8;
 const BLOCKER_OFFSET_Y = 0;
 const BLOCKER_OFFSET_Z = BLOCKER_DEPTH/2;
 
+const OVERRIDE_WIDTH = 0.2;
+const OVERRIDE_HEIGHT = 0.2;
+const OVERRIDE_DEPTH = 0.005;
 const OVERRIDE_OFFSET_X = 3.2;
 const OVERRIDE_OFFSET_Y = 1;
 const OVERRIDE_OFFSET_Z = -BLOCKER_DEPTH/2;
@@ -311,6 +314,7 @@ export default class Numlock {
             this.grantAccess();
             this.override.updateColor(MRE.Color3.Green());
         }
+        this.isGranted = !this.isGranted;
     }
 
     private playSound(musicAsset: MRE.Sound){
