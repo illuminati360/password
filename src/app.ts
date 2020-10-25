@@ -35,8 +35,8 @@ const OVERRIDE_WIDTH = 0.2;
 const OVERRIDE_HEIGHT = 0.2;
 const OVERRIDE_DEPTH = 0.005;
 const OVERRIDE_OFFSET_X = 3.2;
-const OVERRIDE_OFFSET_Y = 1;
-const OVERRIDE_OFFSET_Z = -BLOCKER_DEPTH/2;
+const OVERRIDE_OFFSET_Y = 2;
+const OVERRIDE_OFFSET_Z = 2;
 
 /**
  * The main class of this app. All the logic goes here.
@@ -290,6 +290,9 @@ export default class Numlock {
 
         // blocker
         this.blocker.block();
+
+        // logic
+        this.isGranted = false;
     }
 
     private grantAccess(){
@@ -304,6 +307,9 @@ export default class Numlock {
         
         // blocker
         this.blocker.unblock();
+
+        // logic
+        this.isGranted = true;
     }
 
     private toggleAccess(){
@@ -314,7 +320,6 @@ export default class Numlock {
             this.grantAccess();
             this.override.updateColor(MRE.Color3.Green());
         }
-        this.isGranted = !this.isGranted;
     }
 
     private playSound(musicAsset: MRE.Sound){
