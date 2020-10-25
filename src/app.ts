@@ -31,6 +31,10 @@ const BLOCKER_OFFSET_X = 2.8;
 const BLOCKER_OFFSET_Y = 0;
 const BLOCKER_OFFSET_Z = BLOCKER_DEPTH/2;
 
+const OVERRIDE_OFFSET_X = 3.2;
+const OVERRIDE_OFFSET_Y = 1;
+const OVERRIDE_OFFSET_Z = -BLOCKER_DEPTH/2;
+
 /**
  * The main class of this app. All the logic goes here.
  */
@@ -50,6 +54,9 @@ export default class Numlock {
     private blockerMeshId: MRE.Guid;
     private blockerMaterialId: MRE.Guid;
 
+    private overrideMeshId: MRE.Guid;
+    private overrideMaterialId: MRE.Guid;
+
     private deniedSound: MRE.Sound;
     private grantedSound: MRE.Sound;
     private beepSound: MRE.Sound;
@@ -63,6 +70,10 @@ export default class Numlock {
     private screenTextColor: MRE.Color3 = MRE.Color3.Black();
 
     private blocker: Blocker;
+
+    private override: Button;
+
+    private isGranted: boolean = false;
 
     // constructor
 	constructor(private _context: MRE.Context, private params: MRE.ParameterSet, _baseUrl: string) {
@@ -81,6 +92,9 @@ export default class Numlock {
         this.blockerMeshId = this.assets.createBoxMesh('blocker_mesh', BLOCKER_WIDTH, BLOCKER_HEIGHT, BLOCKER_DEPTH).id;
         this.blockerMaterialId = this.assets.createMaterial('blocker_material', { color: MRE.Color3.LightGray() }).id;
 
+        this.overrideMeshId = this.assets.createBoxMesh('override_mesh', BLOCKER_WIDTH, BLOCKER_HEIGHT, BLOCKER_DEPTH).id;
+        this.overrideMaterialId = this.assets.createMaterial('override_material', { color: MRE.Color3.Green() }).id;
+
         this.deniedSound = this.assets.createSound('denied', { uri: `${this.baseUrl}/denied.ogg` });
         this.grantedSound = this.assets.createSound('granted', { uri: `${this.baseUrl}/granted.ogg` });
         this.beepSound = this.assets.createSound('beep', { uri: `${this.baseUrl}/beep.ogg` });
@@ -95,6 +109,7 @@ export default class Numlock {
         this.createScreen(this.context);
         this.createNumpad(this.context);
         this.createBlocker(this.context);
+        this.createOverride(this.context);
     }
 
     private createScreen(context: MRE.Context){
@@ -198,6 +213,25 @@ export default class Numlock {
         });
     }
 
+    private createOverride(context: MRE.Context){
+        this.override = new Button(this.context, {
+            name: "override",
+            position: { 
+                x: OVERRIDE_OFFSET_X,
+                y: OVERRIDE_OFFSET_Y,
+                z: OVERRIDE_OFFSET_Z,
+            },
+            scale: { x: BUTTON_SCALE, y: BUTTON_SCALE, z: BUTTON_SCALE },
+            meshId: this.overrideMeshId,
+            materialId: this.overrideMaterialId,
+            buttonDepth: BUTTON_DEPTH
+        });
+
+        this.override.addBehavior((_,__)=>{
+            this.toggleAccess();
+        });
+    }
+
     private refreshScreen(){
         this.screen.updateLabel(this.screenText, this.screenTextColor);
     }
@@ -267,6 +301,16 @@ export default class Numlock {
         
         // blocker
         this.blocker.unblock();
+    }
+
+    private toggleAccess(){
+        if (this.isGranted){
+            this.denyAccess();
+            this.override.updateColor(MRE.Color3.Red());
+        } else{
+            this.grantAccess();
+            this.override.updateColor(MRE.Color3.Green());
+        }
     }
 
     private playSound(musicAsset: MRE.Sound){

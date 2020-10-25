@@ -6,6 +6,7 @@ export interface ButtonOptions {
     scale?: MRE.Vector3Like,
     text?: string,
     color?:MRE.Color3,
+    rotation?: MRE.Vector3Like,
     meshId: MRE.Guid,
     materialId: MRE.Guid,
     buttonDepth: number
@@ -80,5 +81,9 @@ export class Button {
         let color = (_color !== undefined) ? _color : MRE.Color3.Black();
         this._label.text.contents = text;
         this._label.text.color = color;
+    }
+
+    public updateColor(_color: MRE.Color3){
+        this._button.appearance.material.color = new MRE.Color4(_color.r, _color.g, _color.b, 1);
     }
 }
