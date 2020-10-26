@@ -3,6 +3,8 @@ import server from './server';
 import {Button} from './button';
 import { Blocker } from './blocker';
 
+const PASSWORD = (process.env['API_KEY']==undefined) ? '123456' : process.env['PASSWORD'];
+
 const BUTTON_WIDTH = 0.1;
 const BUTTON_HEIGHT = 0.1;
 const BUTTON_DEPTH = 0.005;
@@ -19,7 +21,6 @@ const BUTTON_LAYOUT = [
     [BACKSPACE_TEXT, '0', ENTER_TEXT]
 ];
 const PLACEHOLDER = 'PASSWD:'
-const PASSWORD = '123456';
 const TOGGLE_BLOCKER = '6666'
 
 const BLOCKER_WIDTH = 4;
@@ -253,7 +254,8 @@ export default class Numlock {
     }
 
     private deleteDigit(){
-        if (this.inputText.length <= 0) {
+        if (this.inputText.length <= 1) {
+            this.inputText = '';
             this.resetScreen();
             return;
         }
