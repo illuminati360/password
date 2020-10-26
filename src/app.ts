@@ -253,7 +253,7 @@ export default class Numlock {
     }
 
     private deleteDigit(){
-        if (this.inputText.length <= 1) {
+        if (this.inputText.length <= 0) {
             this.resetScreen();
             return;
         }
