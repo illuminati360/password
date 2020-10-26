@@ -3,7 +3,7 @@ import server from './server';
 import {Button} from './button';
 import { Blocker } from './blocker';
 
-const PASSWORD = (process.env['API_KEY']==undefined) ? '123456' : process.env['PASSWORD'];
+const PASSWORD = (process.env['PASSWORD']==undefined) ? '123456' : process.env['PASSWORD'];
 
 const BUTTON_WIDTH = 0.1;
 const BUTTON_HEIGHT = 0.1;
